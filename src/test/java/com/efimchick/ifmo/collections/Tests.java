@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 
 public class Tests {
 
-
     @Test
     public void testPairStringList() {
         List<String> list = new PairStringList();

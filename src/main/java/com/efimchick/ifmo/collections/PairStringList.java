@@ -2,154 +2,83 @@ package com.efimchick.ifmo.collections;
 
 import java.util.*;
 
-class PairStringList implements List<String> {
-    private List<String> list;
-
-    public PairStringList() {
-        this.list = new ArrayList<>();
-    }
+class PairStringList extends ArrayList<String> {
 
     @Override
-    public int size() {
-        return list.size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return list.isEmpty();
-    }
-
-    @Override
-    public boolean contains(Object o) {
-        return list.contains(o);
-    }
-
-    @Override
-    public Iterator<String> iterator() {
-        return list.iterator();
-    }
-
-    @Override
-    public Object[] toArray() {
-        return list.toArray();
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return list.toArray(a);
-    }
-
-    @Override
-    public boolean add(String s) {
-       return list.add(s)&&list.add(s);
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        int index = list.indexOf(o);
-        if (index != -1) {
-            list.remove(index);
-            list.remove(index);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return list.containsAll(c);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends String> c) {
-        boolean modified = false;
-        for (String element : c) {
-            modified |= add(element);
-        }
-        return modified;
-    }
-
-    @Override
-    public boolean addAll(int index, Collection<? extends String> c) {
-        if (index < 0 || index > size()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        int i = index * 2; // Adjust the index to account for pairs
-        for (String s : c) {
-            list.add(i, s);
-            list.add(i + 1, s); // Add the pair as well
-            i += 2; // Increment i by 2 to account for the added elements and their pairs
-        }
-        return !c.isEmpty();
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return list.removeAll(c);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return list.retainAll(c);
-    }
-
-    @Override
-    public void clear() {
-        list.clear();
-    }
-
-    @Override
-    public String get(int index) {
-        return list.get(index*2+1);
-    }
-
-    @Override
-    public String set(int index, String element) {
-        String replacedElement = list.set(index * 2, element);
-        list.set(index * 2 + 1, element);
-        return replacedElement;
+    public boolean add(String str) {
+        super.add(str);
+        return super.add(str);
     }
 
     @Override
     public void add(int index, String element) {
-        if (index < 0 || index > list.size()) {
-            throw new IndexOutOfBoundsException();
+        if (index % 2 == 0) {
+            super.add(index, element);
+            super.add(index, element);
+        } else {
+            super.add(index + 1, element);
+            super.add(index + 1, element);
         }
-        list.add(index, element);
-        list.add(index, element);
+    }
+
+
+    @Override
+    public boolean addAll(Collection<? extends String> c) {
+        boolean isAdd = true;
+        for (String s : c) {
+            isAdd = add(s);
+            if (isAdd == false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends String> c) {
+        if (index % 2 == 0) {
+            for (String s : c) {
+                add(index, s);
+                index += 2;
+            }
+        } else {
+            for (String s : c) {
+                add(++index, s);
+                index += 1;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object str) {
+        super.remove(str);
+        return super.remove(str);
     }
 
     @Override
     public String remove(int index) {
-        int actualIndex = index /2;
-        String removedElement = list.remove(actualIndex);
-        list.remove(actualIndex); // remove the pair element
-        return removedElement;
+        if (index % 2 == 0) {
+            super.remove(index);
+            return super.remove(index + 1);
+        } else {
+            super.remove(index);
+            return super.remove(index - 1);
+        }
     }
 
     @Override
-    public int indexOf(Object o) {
-        return list.indexOf(o);
+    public String set(int index, String element) {
+        if (index % 2 == 0) {
+            super.set(index, element);
+            return super.set(index + 1, element);
+        } else {
+            super.set(index, element);
+            return super.set(index - 1, element);
+        }
     }
 
-    @Override
-    public int lastIndexOf(Object o) {
-        return list.lastIndexOf(o);
-    }
-
-    @Override
-    public ListIterator<String> listIterator() {
-        return list.listIterator();
-    }
-
-    @Override
-    public ListIterator<String> listIterator(int index) {
-        return list.listIterator(index);
-    }
-
-    @Override
-    public List<String> subList(int fromIndex, int toIndex) {
-        return list.subList(fromIndex, toIndex);
+    public int size() {
+        return super.size();
     }
 }
